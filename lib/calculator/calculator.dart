@@ -12,16 +12,18 @@ class Calculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.indigo[200],
+      color: Theme.of(context).primaryColor,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
+            flex: 1,
             child: Placeholder(),
           ),
           Expanded(
+            flex: 4,
             child: Placeholder(),
           ),
         ],
