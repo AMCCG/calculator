@@ -1,9 +1,20 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final counterProvider = StateProvider<int>(
-  (ref) => 0,
+final counterProvider = StateProvider<String>(
+  (ref) => "0",
+);
+final equationAProvider = StateProvider<String>(
+  (ref) => "",
+);
+final operatorProvider = StateProvider<String>(
+  (ref) => "",
+);
+final isReplaceProvider = StateProvider<bool>(
+  (ref) => false,
 );
 
 class Calculator extends StatelessWidget {
@@ -26,13 +37,13 @@ class Calculator extends StatelessWidget {
   }
 }
 
-class ButtonGroupContainer extends StatelessWidget {
+class ButtonGroupContainer extends ConsumerWidget {
   const ButtonGroupContainer({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       flex: 3,
       child: Column(
@@ -64,7 +75,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      clear(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -82,7 +95,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      clearAll(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -100,7 +115,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      delete(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -212,7 +229,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "7");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -230,7 +249,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "8");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -248,7 +269,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "9");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -295,7 +318,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "4");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -313,7 +338,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "5");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -331,7 +358,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "6");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -378,7 +407,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "1");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -396,7 +427,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "2");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -414,7 +447,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "3");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -432,7 +467,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      addition(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -479,7 +516,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      append(ref, "0");
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -515,7 +554,9 @@ class ButtonGroupContainer extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      calculate(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -540,25 +581,81 @@ class ButtonGroupContainer extends StatelessWidget {
       ),
     );
   }
+
+  void calculate(WidgetRef ref) {
+    if (ref.read(equationAProvider.notifier).state.isNotEmpty &&
+        ref.read(operatorProvider.notifier).state.isNotEmpty) {
+      int total = int.parse(ref.read(equationAProvider.notifier).state) +
+          int.parse(ref.read(counterProvider.notifier).state);
+      ref.read(counterProvider.notifier).state = total.toString();
+    }
+  }
+
+  void clear(WidgetRef ref) {
+    ref.read(counterProvider.notifier).state = "0";
+  }
+
+  void clearAll(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state = "";
+    ref.read(operatorProvider.notifier).state = "";
+    ref.read(counterProvider.notifier).state = "0";
+  }
+
+  void addition(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state =
+        ref.read(counterProvider.notifier).state;
+    ref.read(operatorProvider.notifier).state = "+";
+    ref.read(isReplaceProvider.notifier).state = true;
+  }
+
+  void append(WidgetRef ref, String value) {
+    if (ref.read(counterProvider.notifier).state == "0" ||
+        ref.read(isReplaceProvider.notifier).state) {
+      ref.read(counterProvider.notifier).state = value;
+    } else {
+      ref.read(counterProvider.notifier).state += value;
+      ref.read(isReplaceProvider.notifier).state = false;
+    }
+  }
+
+  void delete(WidgetRef ref) {
+    int length = ref.read(counterProvider.notifier).state.length;
+    if (length > 0) {
+      ref.read(counterProvider.notifier).state =
+          ref.read(counterProvider.notifier).state.substring(0, length - 1);
+    }
+  }
 }
 
-class ScreenContainer extends StatelessWidget {
+class ScreenContainer extends ConsumerWidget {
   const ScreenContainer({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        alignment: Alignment.centerRight,
-        child: const Text(
-          "0",
-          style: TextStyle(fontSize: 80, color: Colors.white),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String value = ref.watch(counterProvider);
+    final String equationA = ref.watch(equationAProvider);
+    final String operator = ref.watch(operatorProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(right: 15),
+          child: Text(
+            "$equationA $operator",
+            style: const TextStyle(fontSize: 16, color: Colors.white),
+          ),
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.only(right: 15),
+          alignment: Alignment.centerRight,
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 80, color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }
