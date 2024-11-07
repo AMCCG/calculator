@@ -57,7 +57,7 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -146,7 +146,7 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -164,7 +164,7 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -182,7 +182,7 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -200,7 +200,9 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      division(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -289,7 +291,9 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      multiplication(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -378,7 +382,9 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      subtraction(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -498,7 +504,7 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -536,7 +542,9 @@ class ButtonGroupContainer extends ConsumerWidget {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.247,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      toDecimal(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -585,9 +593,25 @@ class ButtonGroupContainer extends ConsumerWidget {
   void calculate(WidgetRef ref) {
     if (ref.read(equationAProvider.notifier).state.isNotEmpty &&
         ref.read(operatorProvider.notifier).state.isNotEmpty) {
-      int total = int.parse(ref.read(equationAProvider.notifier).state) +
-          int.parse(ref.read(counterProvider.notifier).state);
-      ref.read(counterProvider.notifier).state = total.toString();
+      double total = 0;
+      if (ref.read(operatorProvider.notifier).state == "+") {
+        total = double.parse(ref.read(equationAProvider.notifier).state) +
+            double.parse(ref.read(counterProvider.notifier).state);
+      } else if (ref.read(operatorProvider.notifier).state == "-") {
+        total = double.parse(ref.read(equationAProvider.notifier).state) -
+            double.parse(ref.read(counterProvider.notifier).state);
+      } else if (ref.read(operatorProvider.notifier).state == "*") {
+        total = double.parse(ref.read(equationAProvider.notifier).state) *
+            double.parse(ref.read(counterProvider.notifier).state);
+      } else if (ref.read(operatorProvider.notifier).state == "/") {
+        total = double.parse(ref.read(equationAProvider.notifier).state) /
+            double.parse(ref.read(counterProvider.notifier).state);
+      }
+      if (total.toString().endsWith(".0")) {
+        ref.read(counterProvider.notifier).state = total.toInt().toString();
+      } else {
+        ref.read(counterProvider.notifier).state = total.toString();
+      }
     }
   }
 
@@ -599,13 +623,6 @@ class ButtonGroupContainer extends ConsumerWidget {
     ref.read(equationAProvider.notifier).state = "";
     ref.read(operatorProvider.notifier).state = "";
     ref.read(counterProvider.notifier).state = "0";
-  }
-
-  void addition(WidgetRef ref) {
-    ref.read(equationAProvider.notifier).state =
-        ref.read(counterProvider.notifier).state;
-    ref.read(operatorProvider.notifier).state = "+";
-    ref.read(isReplaceProvider.notifier).state = true;
   }
 
   void append(WidgetRef ref, String value) {
@@ -620,9 +637,45 @@ class ButtonGroupContainer extends ConsumerWidget {
 
   void delete(WidgetRef ref) {
     int length = ref.read(counterProvider.notifier).state.length;
-    if (length > 0) {
+    if (length > 1) {
       ref.read(counterProvider.notifier).state =
           ref.read(counterProvider.notifier).state.substring(0, length - 1);
+    }
+  }
+
+  void addition(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state =
+        ref.read(counterProvider.notifier).state;
+    ref.read(operatorProvider.notifier).state = "+";
+    ref.read(isReplaceProvider.notifier).state = true;
+  }
+
+  void subtraction(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state =
+        ref.read(counterProvider.notifier).state;
+    ref.read(operatorProvider.notifier).state = "-";
+    ref.read(isReplaceProvider.notifier).state = true;
+  }
+
+  void multiplication(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state =
+        ref.read(counterProvider.notifier).state;
+    ref.read(operatorProvider.notifier).state = "*";
+    ref.read(isReplaceProvider.notifier).state = true;
+  }
+
+  void division(WidgetRef ref) {
+    ref.read(equationAProvider.notifier).state =
+        ref.read(counterProvider.notifier).state;
+    ref.read(operatorProvider.notifier).state = "/";
+    ref.read(isReplaceProvider.notifier).state = true;
+  }
+
+  void toDecimal(WidgetRef ref) {
+    if (!ref.read(counterProvider.notifier).state.contains(".")) {
+      ref.read(counterProvider.notifier).state =
+          double.parse(ref.read(counterProvider.notifier).state.toString())
+              .toString();
     }
   }
 }
